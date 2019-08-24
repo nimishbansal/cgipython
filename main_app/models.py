@@ -6,9 +6,15 @@ from main_app.utils import EditorChoices
 class GamePlatform(models.Model):
     name = models.CharField(max_length=100, unique=True)
 
+    def __str__(self):
+        return self.name
+
 
 class GameGenre(models.Model):
     name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Game(models.Model):
