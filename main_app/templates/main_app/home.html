@@ -4,14 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Title</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <!-- jQuery library -->
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>-->
     <!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>-->
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </head>
+<style>
+    .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+    }
+</style>
 
 <body>
 <div class="container-fluid">
@@ -37,18 +45,38 @@
         </tr>
         </tbody>
     </table>
+
+    <!--Page Controllers-->
+    <div class="row center">
+        <a href="#" id="back"><i class="material-icons">arrow_back</i></a>
+        <a href="#" id="next"><i class="material-icons">arrow_forward</i></a>
+
+    </div>
+
+
+
 </div>
 </body>
 </html>
 <script>
 var no_of_results;
 var records;
+var previous;
+var next;
+var current_url="http://127.0.0.1:8000/main_app/api/games/";
+var current_data;
+function clear()
+{
+    $("#records").find("tr:gt(0)").remove();
+}
+
 function loadajax()
 {
+    clear();
     $.ajax
     ({
       type: "GET",
-      url: "http://127.0.0.1:8000/main_app/api/games/",
+      url: current_url,
 //      url: "https://cgpython.herokuapp.com/main_app/api/games/",
       dataType: 'json',
       headers: {
@@ -56,6 +84,27 @@ function loadajax()
       },
       success: function (data){
         console.log(data);
+        current_data = data;
+        previous=data['previous'];
+        next=data['next'];
+
+        if (previous==undefined)
+        {
+            $('#back').hide();
+        }
+        else{
+            $('#back').show();
+        }
+
+       if (next==undefined)
+        {
+            $('#next').hide();
+        }
+        else
+        {
+            $('#next').show();
+        }
+
         no_of_results = data['count'];
         records = data['results'];
         for(var i=0;i<records.length;i++)
@@ -67,7 +116,6 @@ function loadajax()
             var editors_choice = records[i]["editors_choice"]
             var score = records[i]['score']
             console.log(obj_id, title, platform, genre, editors_choice, score);
-
             $('#records tr:last').after('<tr><th scope="row">'+obj_id+'</th><td>'+title+'</td><td>'+platform+'</td><td>'+genre+'</td><td>'+score+'</td><td>'+editors_choice+'</td></tr>');
 
         }
@@ -76,7 +124,19 @@ function loadajax()
     });
 
 }
+
 $(function(){
     setTimeout(loadajax,0);
 });
+
+$("#back").on('click', function(){
+    current_url = current_data['previous'];
+    setTimeout(loadajax,0);
+    });
+$("#next").on('click', function(){
+    current_url = current_data['next'];
+    setTimeout(loadajax,0);
+    });
+
+
 </script>
