@@ -17,19 +17,23 @@ class GamesListAPIView(ListAPIView):
     serializer_class = GameSerializer
     pagination_class = StandardPagination
 
-    def get(self, request, *args, **kwargs):
-        res = super(GamesListAPIView, self).get(request, *args, **kwargs)
-        platforms = GamePlatformSerializer(GamePlatform.objects.all(), many=True)
-        genres = GameGenreSerializer(GameGenre.objects.all(), many=True)
-        editors_choice = ['Y', 'N']
-        res.data.update({"platforms": platforms.data})
-        res.data.update({"genres": genres.data})
-        res.data.update({"editors_choice": editors_choice})
-        return res
-
     def get_queryset(self):
         queryset = Game.objects.all()
-        return queryset
+        platforms = self.request.query_params.get('platforms')
+        editors_choice = self.request.query_params.get('editors_choice')
+        genres = self.request.query_params.get('genres')
+        search_term = self.request.query_params.get('search_term')
+        if platforms:
+            queryset = queryset.filter(platform__id__in=platforms.split(","))
+        if genres:
+            queryset = queryset.filter(genre__id__in=genres.split(","))
+        if editors_choice:
+            queryset = queryset.filter(editors_choice__in=editors_choice.split(","))
+        if search_term:
+            queryset = queryset.filter(title__icontains=search_term)
+
+        return queryset.distinct()
+
 
 
 class GameDetailAPIView(RetrieveAPIView):

@@ -84,11 +84,14 @@
         </tbody>
     </table>
 
+    <div class="btn btn-info" id="apply_filter">
+        Apply Filters
+    </div>
+
     <!--Page Controllers-->
     <div class="row center">
         <a href="#" id="back"><i class="material-icons">arrow_back</i></a>
         <a href="#" id="next"><i class="material-icons">arrow_forward</i></a>
-
     </div>
 
 
@@ -101,6 +104,7 @@ var no_of_results;
 var records;
 var previous;
 var next;
+var base_url = "http://127.0.0.1:8000/main_app/api/games/"
 var current_url="http://127.0.0.1:8000/main_app/api/games/";
 var current_data;
 function clear()
@@ -176,6 +180,18 @@ $("#back").on('click', function(){
 $("#next").on('click', function(){
     current_url = current_data['next'];
     setTimeout(loadajax,0);
+    });
+
+$("#apply_filter").on('click', function()
+    {
+        var platforms = $(".platform-select").val().join();
+        var genres = $(".genre-select").val().join();
+        var editor_choice = $(".editorchoice-select").val().join();
+        var search_term = $("#title_search").val();
+        console.log(platforms, genres, editor_choice, search_term);
+        var url =base_url + "?" + 'platforms='+platforms+'&genres='+genres+'&editors_choice='+editor_choice+'&search_term='+search_term;
+        current_url = url;
+        setTimeout(loadajax,0);
     });
 
 </script>
