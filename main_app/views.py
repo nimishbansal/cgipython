@@ -3,14 +3,14 @@ from django.shortcuts import render
 from rest_framework.authentication import BasicAuthentication, TokenAuthentication
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 # from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny
 
-from main_app.models import Game, GamePlatform, GameGenre
+from main_app.models import GamePlatform, GameGenre
 
 
 @api_view(('GET', 'POST'))
 @authentication_classes((BasicAuthentication, TokenAuthentication))
-@permission_classes((IsAuthenticated,))
+@permission_classes((AllowAny,))
 def home(request):
     platforms = GamePlatform.objects.all()
     genres = GameGenre.objects.all()

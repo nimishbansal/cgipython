@@ -100,6 +100,7 @@
 </body>
 </html>
 <script>
+var auth_method = prompt("Which authentication method you will like to use\n 1.'T' for Token Authentication\n 2.'B' for BasicAuth")
 var no_of_results;
 var records;
 var previous;
@@ -121,14 +122,28 @@ function loadajax()
     $(".editorchoice-select").chosen()
     clear();
     $("#message").html("<img src='https://hackernoon.com/hn-images/0*4Gzjgh9Y7Gu8KEtZ.gif' width=150 height=150>");
+
+    var headers;
+    if (auth_method == 'B')
+    {
+         headers = {
+         "Authorization": "Basic " + btoa("nimish" + ":" + "test")
+         }
+    }
+    else if (auth_method == 'T')
+    {
+        headers = {
+        "Authorization": "Token " + "c7a5eea92bd17b96fcc15836aabe912470fbb5cf" //get the token here by hitting login api (here we are using static)
+        }
+    }
+
+
     $.ajax
     ({
       type: "GET",
         url: current_url,
       dataType: 'json',
-      headers: {
-        "Authorization": "Basic " + btoa("nimish" + ":" + "test")
-      },
+      headers: headers,
       success: function (data){
 //        console.log(data);
         current_data = data;
