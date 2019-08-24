@@ -34,7 +34,7 @@ class GamesListAPIView(ListAPIView):
         if search_term:
             queryset = queryset.filter(title__icontains=search_term)
 
-        return queryset.distinct()
+        return queryset.order_by('id').distinct()
 
 
 class GameDetailAPIView(RetrieveAPIView):
