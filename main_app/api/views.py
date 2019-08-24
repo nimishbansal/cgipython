@@ -35,7 +35,6 @@ class GamesListAPIView(ListAPIView):
         return queryset.distinct()
 
 
-
 class GameDetailAPIView(RetrieveAPIView):
     authentication_classes = [BasicAuthentication, TokenAuthentication]
     permission_classes = [IsAuthenticated, ]

@@ -104,8 +104,10 @@ var no_of_results;
 var records;
 var previous;
 var next;
-var base_url = "http://127.0.0.1:8000/main_app/api/games/"
-var current_url="http://127.0.0.1:8000/main_app/api/games/";
+//var base_url = "http://127.0.0.1:8000/main_app/api/games/"
+//var current_url="http://127.0.0.1:8000/main_app/api/games/";
+var base_url = "https://cgpython.herokuapp.com/main_app/api/games/"
+var current_url = "https://cgpython.herokuapp.com/main_app/api/games/"
 var current_data;
 function clear()
 {
@@ -121,14 +123,13 @@ function loadajax()
     $.ajax
     ({
       type: "GET",
-      url: current_url,
-//      url: "https://cgpython.herokuapp.com/main_app/api/games/",
+        url: current_url,
       dataType: 'json',
       headers: {
         "Authorization": "Basic " + btoa("nimish" + ":" + "test")
       },
       success: function (data){
-        console.log(data);
+//        console.log(data);
         current_data = data;
         previous=data['previous'];
         next=data['next'];
@@ -182,16 +183,32 @@ $("#next").on('click', function(){
     setTimeout(loadajax,0);
     });
 
-$("#apply_filter").on('click', function()
-    {
+function apply_filters()
+{
         var platforms = $(".platform-select").val().join();
         var genres = $(".genre-select").val().join();
         var editor_choice = $(".editorchoice-select").val().join();
         var search_term = $("#title_search").val();
-        console.log(platforms, genres, editor_choice, search_term);
+//        console.log(platforms, genres, editor_choice, search_term);
         var url =base_url + "?" + 'platforms='+platforms+'&genres='+genres+'&editors_choice='+editor_choice+'&search_term='+search_term;
         current_url = url;
         setTimeout(loadajax,0);
+
+
+}
+
+$("#apply_filter").on('click', function()
+    {
+    apply_filters();
     });
+
+$('input').keydown( function( event ) {
+    if ( event.which === 13 ) {
+        console.log("pressed");
+        event.preventDefault();
+        apply_filters();
+        return false;
+    }
+});
 
 </script>
