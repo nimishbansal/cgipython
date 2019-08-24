@@ -1,3 +1,4 @@
+import time
 from rest_framework.authentication import BasicAuthentication, TokenAuthentication
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.pagination import PageNumberPagination
@@ -18,6 +19,7 @@ class GamesListAPIView(ListAPIView):
     pagination_class = StandardPagination
 
     def get_queryset(self):
+        time.sleep(1)  # just to show loader
         queryset = Game.objects.all()
         platforms = self.request.query_params.get('platforms')
         editors_choice = self.request.query_params.get('editors_choice')

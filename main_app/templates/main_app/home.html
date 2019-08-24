@@ -83,7 +83,7 @@
         </tr>
         </tbody>
     </table>
-
+    <div id="message"></div>
     <div class="btn btn-info" id="apply_filter">
         Apply Filters
     </div>
@@ -120,6 +120,7 @@ function loadajax()
     $(".genre-select").chosen()
     $(".editorchoice-select").chosen()
     clear();
+    $("#message").html("<img src='https://hackernoon.com/hn-images/0*4Gzjgh9Y7Gu8KEtZ.gif' width=150 height=150>");
     $.ajax
     ({
       type: "GET",
@@ -150,7 +151,14 @@ function loadajax()
             $('#next').show();
         }
 
+        $("#message").html("");
         no_of_results = data['count'];
+
+        if (no_of_results==0)
+        {
+            $("#message").html("No records Found")
+        }
+
         records = data['results'];
         for(var i=0;i<records.length;i++)
         {
