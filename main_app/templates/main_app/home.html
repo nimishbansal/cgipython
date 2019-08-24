@@ -38,11 +38,14 @@
         <thead class="thead-dark">
         <tr>
             <th scope="col">#</th>
-            <th scope="col"><div class="col"><div>Title</div><input type="text" id="title_search"/></div></th>
+            <th scope="col"><div class="col-sm-3"><div>Title</div><input type="text" id="title_search"/></div></th>
             <th scope="col">
                 <div class="col-sm-3">
                     <div>Platform</div>
                     <select multiple class="platform-select">
+                        {% for platform in platforms %}
+                            <option value="{{platform.id}}">{{platform.name}}</option>
+                        {% endfor %}
                     </select>
                 </div>
             </th>
@@ -50,6 +53,9 @@
                 <div class="col-sm-3">
                     <div>Genre</div>
                     <select multiple class="genre-select">
+                    {% for genre in genres %}
+                            <option value="{{genre.id}}">{{genre.name}}</option>
+                    {% endfor %}
                     </select>
                 </div>
             </th>
@@ -58,6 +64,9 @@
                 <div class="col-sm-3">
                     <div>Editor choice</div>
                     <select multiple class="editorchoice-select">
+                        {% for editors_choice in editors_choices %}
+                            <option value="{{editors_choice}}">{{editors_choice}}</option>
+                    {% endfor %}
                     </select>
                 </div>
             </th>
@@ -119,7 +128,6 @@ function loadajax()
         current_data = data;
         previous=data['previous'];
         next=data['next'];
-
         if (previous==undefined)
         {
             $('#back').hide();
@@ -147,7 +155,7 @@ function loadajax()
             var genre = records[i]["genre"]["name"]
             var editors_choice = records[i]["editors_choice"]
             var score = records[i]['score']
-            console.log(obj_id, title, platform, genre, editors_choice, score);
+            //console.log(obj_id, title, platform, genre, editors_choice, score);
             $('#records tr:last').after('<tr><th scope="row">'+obj_id+'</th><td>'+title+'</td><td>'+platform+'</td><td>'+genre+'</td><td>'+score+'</td><td>'+editors_choice+'</td></tr>');
 
         }
