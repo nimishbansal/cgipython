@@ -1,7 +1,8 @@
-from django.urls import path
+from django.urls import path, include, re_path
 
 from main_app import views
 
 urlpatterns = [
-    path('', views.home)
+    re_path(r'api/', include('main_app.api.urls')),
+    re_path(r'^$', views.home),
 ]
