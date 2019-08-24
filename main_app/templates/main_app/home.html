@@ -4,29 +4,79 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Title</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <!-- jQuery library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <!-- Latest compiled JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>-->
+    <!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>-->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </head>
 
 <body>
-<div class="container">
-    <h1>Hello</h1>
-    <div class="row">
-        <div class="col-xs-12 col-sm-6 col-lg-4 btn btn-danger" id="myBtn">Click</div>
-        <div class="col-xs-12 col-sm-6 col-lg-4 btn btn-danger" id="myBtn1">Click</div>
-        <div class="col-xs-12 col-sm-6 col-lg-4 btn btn-danger" id="myBtn2">Click</div>
-        <div class="col-xs-12 col-sm-6 col-lg-4 btn btn-danger" id="myBtn3">Click</div>
-        <img src="{{ file.url }}">
-    </div>
+<div class="container-fluid">
+    <table class="table table-hover">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Title</th>
+            <th scope="col">Platform</th>
+            <th scope="col">Genre</th>
+            <th scope="col">Score</th>
+            <th scope="col">Editor's Choice</th>
+        </tr>
+        </thead>
+        <tbody id="records">
+        <tr style="display:none">
+            <th scope="row">1</th>
+            <td>a</td>
+            <td>b</td>
+            <td>c</td>
+            <td>d</td>
+            <td>e</td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 </body>
 </html>
 <script>
-    $('.btn').text("hmm");
-    $('#myBtn').click(function(){
-    alert("clicked");
+var no_of_results;
+var records;
+function loadajax()
+{
+    $.ajax
+    ({
+      type: "GET",
+      url: "http://127.0.0.1:8000/main_app/api/games/",
+//      url: "https://cgpython.herokuapp.com/main_app/api/games/",
+      dataType: 'json',
+      headers: {
+        "Authorization": "Basic " + btoa("nimish" + ":" + "test")
+      },
+      success: function (data){
+        console.log(data);
+        no_of_results = data['count'];
+        records = data['results'];
+        for(var i=0;i<records.length;i++)
+        {
+            var obj_id = records[i]["id"]
+            var title = records[i]["title"]
+            var platform = records[i]["platform"]["name"]
+            var genre = records[i]["genre"]["name"]
+            var editors_choice = records[i]["editors_choice"]
+            var score = records[i]['score']
+            console.log(obj_id, title, platform, genre, editors_choice, score);
+
+            $('#records tr:last').after('<tr><th scope="row">'+obj_id+'</th><td>'+title+'</td><td>'+platform+'</td><td>'+genre+'</td><td>'+score+'</td><td>'+editors_choice+'</td></tr>');
+
+        }
+
+      }
     });
+
+}
+$(function(){
+    setTimeout(loadajax,0);
+});
 </script>
