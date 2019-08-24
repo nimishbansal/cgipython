@@ -4,5 +4,5 @@ from main_app import views
 
 urlpatterns = [
     re_path(r'api/', include('main_app.api.urls')),
-    re_path(r'^games/$', views.home),
+    re_path(r'^games/$', views.home, name='home'),
 ]
